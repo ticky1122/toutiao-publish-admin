@@ -6,6 +6,7 @@
             text-color="#fff"
             active-text-color="#ffd04b"
             router
+            :collapse="isCollapse"
     >
         <el-menu-item index="/">
                 <i class="el-icon-location"></i>
@@ -20,7 +21,7 @@
             <span slot="title">素材管理</span>
         </el-menu-item>
         <el-menu-item index="/publish">
-            <i class="iconfont icon-publish"></i>
+            <i class="el-icon-s-promotion"></i>
             <span slot="title">发布文章</span>
         </el-menu-item>
         <el-menu-item index="/comment">
@@ -43,7 +44,13 @@
         name: "aside",
         methods: {
 
-        }
+        },
+        data(){
+            return {}
+        },
+        props:{
+            isCollapse:Boolean
+        },
     }
 </script>
 

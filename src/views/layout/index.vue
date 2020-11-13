@@ -1,19 +1,19 @@
 <template>
 
     <el-container class="layout-container">
-        <el-aside width="200px">
-            <aside-menu/>
+        <el-aside width="auto">
+            <aside-menu :is-collapse="isCollapse"/>
         </el-aside>
         <el-container >
             <el-header>
                 <div class="head-content">
                     <div>
-                        <i class="el-icon-s-fold"></i>
+                        <i :class="isCollapse?'el-icon-s-unfold' : 'el-icon-s-fold'" @click="collapse"></i>
                         晋级赛黑马头条发布系统
                     </div>
                     <el-dropdown >
                         <div class="head-right">
-                            <img src="{{user.photo}}" alt="">
+                            <img :src="user.photo" alt="">
                             <span class="username">{{user.name}}</span>
                             <i class="el-icon-arrow-down"></i>
                         </div>
@@ -22,14 +22,16 @@
 <!--                      </span>-->
                         <el-dropdown-menu slot="dropdown">
                             <el-dropdown-item>设置</el-dropdown-item>
-                            <el-dropdown-item>退出</el-dropdown-item>
+                            <el-dropdown-item @click.native="logout">退出</el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
                 </div>
 
 
             </el-header>
-            <el-main>Main</el-main>
+            <el-main>
+                <router-view/>
+            </el-main>
         </el-container>
     </el-container>
 
@@ -37,16 +39,19 @@
 
 <script>
     import AsideMenu from './components/aside'
+    import MainMenu from '@/views/home/index'
     import {getUserProfile} from '@/api/user'
     export default {
-        name: "index",
+        name: "layoutIndex",
         data(){
           return {
-              user: {}
+              user: {},
+              isCollapse:false,
           }
         },
         components:{
-            AsideMenu
+            AsideMenu,
+            MainMenu
         },
         created() {
             this.loadUserProfile()
@@ -55,9 +60,33 @@
             loadUserProfile(){
                 getUserProfile().then(res=>{
                     this.user = res.data.data
-                    console.log(res)
                 })
+            },
+            collapse(){
+                this.isCollapse=!this.isCollapse
+            },
+            logout(){
+                this.$confirm('退出, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    window.localStorage.removeItem('user')
+                    this.$router.push('/login')
+                    this.$message({
+                        type: 'success',
+                        message: '退出成功!'
+                    });
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消退出'
+                    });
+                });
             }
+        },
+        computed:{
+
         }
     }
 </script>
@@ -77,8 +106,7 @@
     .el-main {
         background-color: #E9EEF3;
         color: #333;
-        text-align: center;
-        line-height: 160px;
+        line-height: 31px;
     }
     .layout-container{
         position: fixed;

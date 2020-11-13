@@ -12,8 +12,5 @@ export const getUserProfile = ()=>{
     return request({
         url:"/mp/v1_0/user/profile",
         method:'get',
-        headers:{
-            Authorization:'Bearer '
-        }
     })
 }

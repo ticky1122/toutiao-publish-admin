@@ -92,6 +92,8 @@
                         type: 'success'
                     });
                     this.buttonLoading=false
+                    //将接口返回的用户相关数据放到本地存储
+                    window.localStorage.setItem('user',JSON.stringify(res.data.data))
                     this.$router.push({name:'home'})
                 }).catch(err=>{
                     this.$message.error('登录失败，手机号或验证码不正确');
